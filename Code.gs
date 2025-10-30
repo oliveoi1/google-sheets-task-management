@@ -1120,8 +1120,11 @@ function rebuildKanbanBoard() {
     kanbanSheet.setColumnWidth(col, 180);
 
     // Extract tasks (reuse lastRow from above)
-    const taskRows = sheet.getRange(DATA_START_ROW, 1, Math.max(0, lastRow - DATA_START_ROW + 1), 9).getValues()
-      .filter(row => row[COLUMNS.TASK - 1]); // Task Title column
+    let taskRows = [];
+    if (lastRow >= DATA_START_ROW) {
+      taskRows = sheet.getRange(DATA_START_ROW, 1, lastRow - DATA_START_ROW + 1, 9).getValues()
+        .filter(row => row[COLUMNS.TASK - 1]); // Task Title column
+    }
     const showTasks = taskRows.slice(0, displayCount);
     showTasks.forEach((row, idx) => {
       const r = 5 + idx; // Tasks start at row 5 on Kanban board
