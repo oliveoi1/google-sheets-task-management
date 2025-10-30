@@ -129,11 +129,11 @@ function setupTaskRowValidation(sheet, row) {
   if (!settingsSheet) return;
   
   try {
-    // Column F: Who dropdown (from Settings E13:E20)
-    const peopleRange = settingsSheet.getRange('E13:E20');
+    // Column F: Who dropdown (from Settings B15:B23 - Team Members)
+    const peopleRange = settingsSheet.getRange('B15:B23');
     const whoValidation = SpreadsheetApp.newDataValidation()
       .requireValueInRange(peopleRange, true)
-      .setAllowInvalid(false)
+      .setAllowInvalid(true) // Allow empty/invalid to avoid errors with blank cells
       .build();
     sheet.getRange(row, COLUMNS.WHO).setDataValidation(whoValidation);
     
@@ -145,16 +145,16 @@ function setupTaskRowValidation(sheet, row) {
       .build();
     sheet.getRange(row, COLUMNS.STATUS).setDataValidation(statusValidation);
     
-    // Column D: Label dropdown (from Settings I3:I8) - if exists
-    const labelsRange = settingsSheet.getRange('I3:I8');
+    // Column D: Label dropdown (from Settings E4:E12 - Task Labels)
+    const labelsRange = settingsSheet.getRange('E4:E12');
     const labelValidation = SpreadsheetApp.newDataValidation()
       .requireValueInRange(labelsRange, true)
       .setAllowInvalid(true)
       .build();
     sheet.getRange(row, COLUMNS.LABEL).setDataValidation(labelValidation);
     
-    // Column E: Pillar dropdown (from Settings G13:G20) - if exists
-    const pillarsRange = settingsSheet.getRange('G13:G20');
+    // Column E: Pillar dropdown (from Settings E15:E23 - Pillars/Departments)
+    const pillarsRange = settingsSheet.getRange('E15:E23');
     const pillarValidation = SpreadsheetApp.newDataValidation()
       .requireValueInRange(pillarsRange, true)
       .setAllowInvalid(true)
@@ -426,10 +426,10 @@ function updatePersonSheets() {
       throw new Error('Settings sheet not found');
     }
 
-    // Get list of people from Settings!E13:E20
-    const peopleData = settingsSheet.getRange('E13:E20').getValues().flat().filter(String);
+    // Get list of people from Settings!B15:B23 (Team Members)
+    const peopleData = settingsSheet.getRange('B15:B23').getValues().flat().filter(String);
     if (peopleData.length === 0) {
-      SpreadsheetApp.getUi().alert('No people found in Settings!E13:E20');
+      SpreadsheetApp.getUi().alert('No people found in Settings!B15:B23 (Team Members section)');
       return;
     }
 
@@ -596,7 +596,7 @@ function onEdit(e) {
   if (settingsSheet) {
 
     try {
-      personNames = settingsSheet.getRange('E13:E20').getValues().flat().filter(String).map(n => n.trim());
+      personNames = settingsSheet.getRange('B15:B23').getValues().flat().filter(String).map(n => n.trim());
 
     } catch (e) {
       Logger.log('Error getting person names: ' + e);
