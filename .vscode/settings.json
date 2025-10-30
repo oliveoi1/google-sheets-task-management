@@ -1,0 +1,13 @@
+{
+  "files.associations": {
+    "*.gs": "javascript"
+  },
+  "editor.formatOnSave": false,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features",
+    "editor.formatOnSave": false
+  }
+}
+

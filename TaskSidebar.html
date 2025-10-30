@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 10px;
+      }
+      label {
+        font-weight: bold;
+        margin-top: 10px;
+        display: block;
+      }
+      input, select, textarea, button {
+        width: 100%;
+        padding: 6px;
+        margin-top: 4px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+      }
+
+    </style>
+
+  </head>
+  <body>
+    <h2>Add New Task</h2>
+    <label for="task-title">Task Title</label>
+    <input type="text" id="task-title" required>
+    <label for="task-desc">Task Description</label>
+    <textarea id="task-desc" rows="3"></textarea>
+    <label for="task-priority">Task Priority</label>
+    <input type="number" id="task-priority" min="1" required>
+    <label for="task-label">Task Label</label>
+    <select id="task-label"></select>
+    <label for="task-pillar">Task Pillar</label>
+    <select id="task-pillar"></select>
+    <label for="task-who">Assigned To</label>
+    <select id="task-who"></select>
+    <label for="task-due">Task Due Date</label>
+    <input type="date" id="task-due">
+    <label for="task-status">Task Status</label>
+    <select id="task-status"></select>
+    <button onclick="submitTask()">Submit</button>
+
+    <script>
+      // Load dropdown options from server
+      google.script.run.withSuccessHandler(populateDropdowns).getDropdownOptions();
+
+      function populateDropdowns(options) {
+        const { statuses, labels, pillars, people } = options;
+        const statusSelect = document.getElementById('task-status');
+        statuses.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = opt.textContent = s;
+          statusSelect.appendChild(opt);
+        });
+        const labelSelect = document.getElementById('task-label');
+        labels.forEach(l => {
+          const opt = document.createElement('option');
+          opt.value = opt.textContent = l;
+          labelSelect.appendChild(opt);
+        });
+        const pillarSelect = document.getElementById('task-pillar');
+        pillars.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = opt.textContent = p;
+          pillarSelect.appendChild(opt);
+        });
+        const whoSelect = document.getElementById('task-who');
+        people.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = opt.textContent = p;
+          whoSelect.appendChild(opt);
+        });
+      }
+
+      function submitTask() {
+        const task = {
+          title: document.getElementById('task-title').value,
+          description: document.getElementById('task-desc').value,
+          priority: parseInt(document.getElementById('task-priority').value),
+          label: document.getElementById('task-label').value,
+          pillar: document.getElementById('task-pillar').value,
+          who: document.getElementById('task-who').value,
+          dueDate: document.getElementById('task-due').value,
+          status: document.getElementById('task-status').value
+        };
+        google.script.run
+        .withSuccessHandler(() => {
+          // Reset form fields after successful submission
+          document.getElementById('task-title').value = '';
+          document.getElementById('task-desc').value = '';
+          document.getElementById('task-priority').value = '';
+          document.getElementById('task-due').value = '';
+          alert('✅ Task added successfully!');
+        })
+        .withFailureHandler((error) => {
+          alert('❌ Error adding task: ' + error.message);
+        })
+        .addTask(task);
+      }
+
+    </script>
+
+  </body>
+
+</html>
