@@ -1,210 +1,321 @@
-# Google Task Sheet - Apps Script
+# 📊 Google Sheets Task Management System
 
-This folder contains the Google Apps Script code for managing tasks in a Google Sheets-based Kanban board system.
+**Version 2.0** - Production-ready, fully configurable task management system for Google Sheets
 
-## File Structure
+## 🌟 Overview
 
-- **Code.gs** - Main Apps Script file containing all task management functions
-- **Sidebar.gs** - Sidebar UI functions for adding new tasks
-- **TaskSidebar.html** - HTML form interface for task creation
-- **PERSON_SHEETS_FEATURE.md** - Documentation for the person sheets feature
-- **CHANGELOG.md** - History of all changes and improvements
+A comprehensive task management solution built with Google Apps Script that transforms Google Sheets into a powerful project management tool. Perfect for teams of any size, fully customizable to match your organization's terminology and workflows.
 
-## Overview
+## ✨ Key Features
 
-This script provides a comprehensive task management system with:
-- **Kanban Board View** - Visual overview of tasks across different status columns
-- **Fulfillment View** - Filtered view of tasks in the "Fulfillment" pillar
-- **Automated Task Movement** - Auto-moves tasks between sheets when status changes
-- **Auto-sorting** - Keeps tasks organized by priority or completion date
-- **Auto-timestamping** - Automatically tracks creation, completion, and update dates
+### 📋 **Core Task Management**
+- Multi-stage workflow (Carpark → Waiting → To Do → In Progress → Completed → Archived)
+- Drag-and-drop status changes
+- Smart priority sorting (supports both numeric "1, 2, 3" and text-prefixed "AI-1, A2, P-5")
+- Custom labels and categories
+- Due date tracking with visual indicators
+- Automatic timestamp management
 
-## Required Sheet Structure
+### 👥 **Person Sheets**
+- Individual sheets for each team member
+- Real-time sync with main task sheets
+- Add new tasks directly on person sheets
+- Edit any field (Task, Priority, Label, Pillar, Status)
+- Tasks automatically move when status changes
+- Smart sorting: Status → Urgent → Priority
 
-The Google Spreadsheet should have the following sheets:
-1. **Settings** - Configuration data
-2. **Carpark** - Tasks parked for later
-3. **Waiting** - Tasks waiting on dependencies
-4. **To Do** - Tasks ready to be worked on
-5. **In Progress** - Tasks currently being worked on
-6. **Completed** - Finished tasks
-7. **Archived** - Archived tasks
-8. **Kanban Board** - Visual kanban view (auto-generated)
-9. **Fulfillment** - Filtered view (auto-generated)
+### 📦 **Fulfillment/Pillar Views**
+- Filter tasks by department, pillar, or category
+- Interactive editing with auto-sync
+- Tasks disappear when pillar changes
+- Same smart sorting as person sheets
+
+### 🎨 **Kanban Board**
+- Visual overview of all active tasks
+- Color-coded by status
+- Urgent tasks highlighted
+- Hover to see details (description, assigned person, pillar)
+- Click to navigate to source sheet
+
+### 🔍 **Advanced Search**
+- Full-text search across all tasks
+- Filter by status, person, label, or pillar
+- Find tasks instantly in large datasets
+- Click results to navigate to task
+
+### 📊 **Analytics & Reporting**
+- Completion rate metrics
+- Tasks by stage breakdown
+- Workload by person
+- Tasks by pillar/department
+- Overdue task tracking
+- Auto-generated Analytics sheet
+
+### 📧 **Email Notifications**
+- Daily reminders for due dates
+- Overdue task alerts
+- Due today/tomorrow notifications
+- 3-day advance warnings
+- Customizable notification schedule
+
+### ⚙️ **Configuration System**
+- **Fully customizable terminology** - Rename "Pillar" to "Department", "Category", etc.
+- **Dynamic range detection** - No hard-coded cell ranges
+- **Flexible column system** - Add your own custom fields
+- **Performance caching** - Reduces API calls
+- **Setup wizard** - Easy onboarding for new users
+
+## 🚀 Getting Started
+
+### Installation
+
+1. **Create a new Google Sheet** or open an existing one
+2. **Open Script Editor**: Extensions → Apps Script
+3. **Create the following files** and paste the code:
+   - `Code.gs` - Main task management logic
+   - `Config.gs` - Configuration management
+   - `Features.gs` - Search, analytics, notifications
+   - `Sidebar.gs` - Add task sidebar
+   - `TaskSidebar.html` - Task creation UI
+   - `SearchDialog.html` - Search interface
+
+4. **Save the project**: File → Save (or Ctrl/Cmd + S)
+5. **Refresh your Google Sheet**: Close and reopen
+6. **Run Setup**: Task Tools → ⚙️ Configuration → Setup Configuration Helper
+7. **Customize Settings**: Modify the generated Settings sheet to match your needs
+
+### Quick Setup
+
+1. Open the **Task Tools** menu
+2. Click **⚙️ Configuration → 📋 Setup Configuration Helper**
+3. Customize your Settings sheet:
+   - **Column B**: Stage names (e.g., Backlog, In Progress, Done)
+   - **Column E**: Team member names
+   - **Column G**: Pillars/departments
+   - **Column I**: Labels (Urgent, Bug, Feature, etc.)
+4. Create your task sheets matching the stage names
+5. Click **👤 Update Person Sheets** to generate individual sheets
+6. Start adding tasks!
+
+## 📖 How to Use
+
+### Adding Tasks
+
+**Method 1: Sidebar**
+1. Task Tools → ➕ Add New Task
+2. Fill in the form
+3. Click Submit
+
+**Method 2: Direct Entry**
+1. Go to any task sheet (To Do, In Progress, etc.)
+2. Type in row 5 or below
+3. Fill in columns A-K
+4. Task is automatically tracked!
+
+**Method 3: Person Sheets**
+1. Go to your personal sheet
+2. Type in any empty row
+3. Select a status from dropdown
+4. Task created on main sheet automatically!
+
+### Searching Tasks
+
+1. Task Tools → 🔍 Search Tasks
+2. Enter search term
+3. Optional: Use advanced filters (status, person, pillar, label)
+4. Click Search
+5. Click any result to view details
+
+### Viewing Analytics
+
+1. Task Tools → 📊 Analytics & Reports → 📈 Generate Analytics
+2. View the Analytics sheet
+3. See metrics:
+   - Total tasks & completion rate
+   - Tasks by stage
+   - Workload by person
+   - Tasks by pillar
+   - Overdue count
+
+### Email Notifications
+
+**Setup** (one-time):
+1. Task Tools → 📊 Analytics & Reports → 📧 Setup Email Notifications
+2. Authorize the script when prompted
+3. Notifications will be sent daily at 8 AM
+
+**Test**:
+- Task Tools → 📊 Analytics & Reports → ✉️ Send Test Notification
+
+**Note**: You'll need to add email addresses to your Settings sheet for this to work. See Configuration section.
+
+## ⚙️ Configuration
 
 ### Settings Sheet Structure
-- `B3:B8` = Status names (Carpark, Waiting, To Do, In Progress, Completed)
-- `C3:C8` = Completed task count
-- `D3:D8` = Total task count
-- `E3:E8` = Total task ceiling
-- `E13:E20` = **Person names** (for WHO assignment and person sheets)
-- `G13:G20` = Pillar names for categorization
-- `I3:I8` = Label options
 
-### Task Sheet Columns
-All task sheets (Carpark through Archived) should have:
-- **Column A** - Task title
-- **Column B** - Description
-- **Column C** - Priority (numeric, lower = higher priority)
-- **Column D** - Label
-- **Column E** - Pillar (e.g., "Fulfillment")
-- **Column F** - Who (assigned person, from Settings!E13:E20)
-- **Column G** - Due Date
-- **Column H** - Status (dropdown with sheet names)
-- **Column I** - Date Completed
-- **Column J** - Last Updated
-- **Column K** - Created Date
+The Settings sheet controls all aspects of the system:
 
-Task data starts at row 5 (rows 1-4 are headers/formatting).
+#### Stage Names (Column B, rows 3+)
+```
+Carpark
+Waiting
+To Do
+In Progress
+Completed
+Archived
+```
+**Customize**: Use your own names (Backlog, In Review, Done, etc.)
 
-## Features
+#### Team Members (Column E, rows 13+)
+```
+Allan
+Janine
+John Doe
+Jane Smith
+```
+**Add more**: Just add names in consecutive rows
 
-### Custom Menu ("Task Tools")
-The script adds a custom menu with the following options:
-- ➕ **Add New Task** - Opens sidebar for adding tasks
-- ↻ **Rebuild Kanban Board** - Refreshes the visual Kanban board
-- 📦 **Update Fulfillment View** - Updates the Fulfillment filtered view
-- 👤 **Update Person Sheets** - Creates/updates individual sheets for each assigned person
-- ↕ **Resort Tasks** - Re-sorts all task sheets
+#### Pillars/Departments (Column G, rows 13+)
+```
+Fulfillment
+Design
+Engineering
+Marketing
+Operations
+```
+**Rename**: Change "Pillar" to anything that fits your org
 
-### Auto-Triggers
-- **onOpen()** - Runs when spreadsheet opens, creates custom menu
-- **onEdit(e)** - Runs on any cell edit, handles status changes and auto-fills dates
+#### Labels (Column I, rows 3+)
+```
+Urgent
+Important
+Bug
+Feature
+Documentation
+```
+**Customize**: Add your own categories
 
-### Key Functions
+### Column Structure
 
-#### `updateFullfillmentSheet()`
-- Aggregates all tasks where Pillar = "Fulfillment"
-- Creates/updates a dedicated "Fulfillment" sheet
-- Protects the Status column from editing
+| Column | Field | Description |
+|--------|-------|-------------|
+| A | Task | Task title/name |
+| B | Description | Detailed description |
+| C | Priority | Numeric (1, 2, 3) or prefixed (AI-1, A2) |
+| D | Label | Category/tag |
+| E | Pillar | Department/area |
+| F | Who | Assigned person |
+| G | Due Date | Target completion date |
+| H | Status | Current stage |
+| I | Date Completed | Auto-filled when completed |
+| J | Last Updated | Auto-updated on any change |
+| K | Created Date | Auto-filled on creation |
 
-#### `updatePersonSheets()` 🆕
-- Reads person names from Settings!E13:E20
-- Creates/updates a sheet for each person
-- Shows tasks assigned to that person (from Carpark, Waiting, To Do, In Progress, Completed)
-- Excludes Archived tasks
-- Status column is editable for moving tasks
-- Auto-sorts by priority
+### Customization
 
-#### `resortAllTaskTabs()`
-- Sorts Carpark, Waiting, To Do, In Progress by priority (Column C)
-- Sorts Completed and Archived by completion date (Column H, newest first)
+To rename "Pillar" to "Department" or another term:
+1. Open `Config.gs`
+2. Find the `getCustomColumnConfig` function
+3. Change `displayName: 'Pillar'` to your preferred term
+4. Update column headers in your task sheets
 
-#### `onEdit(e)` - Enhanced 🆕
-- Auto-fills Created Date when a new task is added (main sheets only)
-- **Now supports both main task sheets AND person sheets**
-- When Status (Column H) changes:
-  - Moves task to corresponding sheet
-  - Updates "Date Completed" if moved to Completed
-  - Updates "Last Updated" timestamp
-  - Sorts target sheet (and source if main sheet)
-  - Rebuilds Kanban board
-  - Shows reminder to update person sheets if moved from person sheet
+## 🎯 Best Practices
 
-#### `rebuildKanbanBoard()`
-- Creates visual Kanban board with:
-  - Sparkline progress bars for each status
-  - Task count ratios (completed/total)
-  - Clickable task cards linking to source sheets
-  - Color-coded cards (special highlighting for "urgent" labels)
-  - Task descriptions as cell comments
+1. **Use consistent naming** - Keep stage names consistent across Settings and sheet names
+2. **Regular updates** - Run "Update Person Sheets" weekly or when team changes
+3. **Clean up** - Archive old completed tasks to improve performance
+4. **Meaningful priorities** - Use numeric (1-10) for core work, prefixed (AI-1, A2) for grouped tasks
+5. **Set due dates** - Enable email notifications for better tracking
+6. **Search frequently** - Use search instead of scrolling through large sheets
 
-## Color Scheme
+## 🔧 Advanced Features
 
-- **Carpark**: Red tones (#fde2dd, #c45f5f)
-- **Waiting**: Orange/tan (#fbe8c6, #9b5e1f)
-- **To Do**: Blue (#dce9f8, #1d3973)
-- **In Progress**: Yellow (#fff5cc, #a17700)
-- **Completed**: Green (#dff2db, #395c29)
+### Batch Operations
 
-Urgent tasks get darker variants of their status colors.
+Update multiple tasks by:
+1. Selecting rows in a task sheet
+2. Using Find & Replace for bulk updates
+3. Person sheets will sync automatically
 
-## Installation
+### Custom Views
 
-1. Open your Google Sheet
-2. Go to **Extensions** > **Apps Script**
-3. Create/update the following files:
-   - **Code.gs** - Copy contents from `Code.gs` in this folder
-   - **Sidebar.gs** - Copy contents from `Sidebar.gs` in this folder  
-   - **TaskSidebar.html** - Copy contents from `TaskSidebar.html` in this folder
-4. Save the project (Ctrl+S or Cmd+S)
-5. Refresh your Google Sheet to see the "Task Tools" menu
+Create filtered views in any sheet:
+1. Data → Create a filter
+2. Save custom filter views
+3. Share views with team members
 
-## Sidebar.gs Functions
+### Integration Ideas
 
-#### `showTaskSidebar()`
-- Opens an HTML sidebar for adding new tasks
-- Loads `TaskSidebar.html` file (separate HTML file required)
+- **Calendar sync**: Export due dates to Google Calendar
+- **Slack integration**: Post updates to Slack channels
+- **Time tracking**: Add time estimate and actual columns
+- **Dependencies**: Add "Blocked By" column for task dependencies
 
-#### `getDropdownOptions()` - Enhanced 🆕
-- Fetches dropdown options from Settings sheet:
-  - Statuses from `B3:B8`
-  - Labels from `I3:I8`
-  - Pillars from `G13:G20`
-  - **People from `E13:E20`** 🆕
-- Returns object with arrays for populating form dropdowns
+## 🐛 Troubleshooting
 
-#### `addTask(task)` - Enhanced 🆕
-- Adds a new task to the appropriate status sheet
-- **Now includes WHO (assigned person) in task data** 🆕
-- Auto-fills timestamps (created, last updated)
-- Fills "Date Completed" if status is "Completed"
-- Finds first empty row or appends to end
-- Sorts sheet after insertion
+### Tasks not syncing to person sheets
+- Run: Task Tools → 👤 Update Person Sheets
+- Check that "Who" column matches person name exactly
 
-#### `sortByPriority(sheet)`
-- Sorts tasks by priority (Column C) in ascending order
-- Handles non-numeric priorities by placing them at the end
-- More robust than the `sortSheetByPriority` in Code.gs
+### Dropdowns not working
+- Run: Task Tools → ⚙️ Configuration → 🔧 Fix Status Values
+- Ensure Settings sheet exists and has data
 
-## TaskSidebar.html
+### Slow performance
+- Run: Task Tools → ⚙️ Configuration → 🗑️ Clear Config Cache
+- Archive old completed tasks
+- Reduce number of rows with validation
 
-The HTML sidebar form provides a user-friendly interface for adding tasks with:
+### Search not finding tasks
+- Check spelling
+- Try broader search terms
+- Use advanced filters
 
-### Form Fields:
-- **Task Title** (text input, required)
-- **Task Description** (textarea, optional)
-- **Task Priority** (number input, min 1, required)
-- **Task Label** (dropdown, populated from Settings)
-- **Task Pillar** (dropdown, populated from Settings)
-- **Assigned To** (dropdown, populated from Settings!E13:E20) 🆕
-- **Task Due Date** (date picker, optional)
-- **Task Status** (dropdown, populated from Settings)
+## 📚 Documentation
 
-### Features:
-- Clean, simple styling with Arial font
-- Auto-populates dropdowns on load via `getDropdownOptions()`
-- Submits task data to `addTask()` function in Sidebar.gs
-- Attempts to reset form after submission (note: references non-existent "taskForm" id)
+- **CHANGELOG.md** - Detailed version history
+- **PERSON_SHEETS_FEATURE.md** - In-depth person sheets guide
+- **NEW_FEATURE_SUMMARY.md** - Quick feature overview
 
-### Bug Fix Needed:
-The form reset references `document.getElementById("taskForm")` but there's no element with that ID. Should be changed to reset individual fields or wrap fields in a `<form>` tag.
+## 🤝 Contributing
 
-## Notes
+This is an open-source project! Contributions welcome:
+1. Fork the repository
+2. Make your changes
+3. Test thoroughly
+4. Submit a pull request
 
-- Date format used: `dd/MM/yyyy`
-- Kanban cards are set to 60px height with 180px column width
-- The Kanban board shows tasks up to the "completed" count from Settings sheet
+## 📝 License
 
-## Code Review Notes
+MIT License - Free to use and modify
 
-✅ **Strengths:**
-- Well-structured with clear function separation
-- Good use of modern JavaScript (const, arrow functions, forEach)
-- Comprehensive automation of task workflows
-- User-friendly with toast notifications
-- Protective measures (column protection in Fulfillment sheet)
+## 🙏 Credits
 
-⚠️ **Potential Improvements:**
-1. No error handling for missing sheets or invalid data
-2. Hard-coded sheet names make it less flexible
-3. `rebuildKanbanBoard()` has high complexity (could be broken into smaller functions)
-4. Some magic numbers (e.g., row 5, column indices) could be constants
-5. No validation for required data structures before operations
-6. Duplicate sort functions: `sortByPriority` in Sidebar.gs vs `sortSheetByPriority` in Code.gs (consider consolidating)
-7. TaskSidebar.html form reset bug - references non-existent "taskForm" ID
+Built by Allan Alomes
+GitHub: https://github.com/oliveoi1/google-sheets-task-management
 
-## License
+## 📞 Support
 
-This is personal project code for task management in Google Sheets.
+- **Issues**: Open a GitHub issue
+- **Questions**: Check existing issues or create a new one
+- **Feature Requests**: We'd love to hear your ideas!
 
+## 🗺️ Roadmap
+
+Future enhancements:
+- [ ] Drag-and-drop Kanban board
+- [ ] Time tracking integration
+- [ ] Gantt chart view
+- [ ] Mobile app companion
+- [ ] Advanced permissions system
+- [ ] Task templates
+- [ ] Recurring tasks
+- [ ] Dependencies and subtasks
+- [ ] Export to PDF reports
+- [ ] API integration framework
+
+---
+
+**Made with ❤️ for productivity**
+
+*Star this repo if you find it useful!*

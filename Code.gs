@@ -172,17 +172,69 @@ function setupTaskRowValidation(sheet, row) {
 }
 
 function onOpen() {
-  SpreadsheetApp.getUi()
-    .createMenu('Task Tools')
+  const ui = SpreadsheetApp.getUi();
+  
+  ui.createMenu('Task Tools')
     .addItem('➕ Add New Task', 'showTaskSidebar')
+    .addItem('🔍 Search Tasks', 'showSearchDialog')
+    .addSeparator()
     .addItem('↻ Rebuild Kanban Board', 'rebuildKanbanBoard')
     .addItem('📦 Update Fullfillment View', 'updateFullfillmentSheet')
     .addItem('👤 Update Person Sheets', 'updatePersonSheets')
-    .addItem('🔧 Fix Status Values', 'fixInvalidStatusValues')
     .addItem('↕ Resort Tasks', 'resortAllTaskTabs')
     .addSeparator()
+    .addSubMenu(ui.createMenu('📊 Analytics & Reports')
+      .addItem('📈 Generate Analytics', 'generateAnalytics')
+      .addItem('📧 Setup Email Notifications', 'installDailyNotificationTrigger')
+      .addItem('✉️ Send Test Notification', 'sendDueDateNotifications'))
+    .addSeparator()
+    .addSubMenu(ui.createMenu('⚙️ Configuration')
+      .addItem('🎯 Complete Setup Wizard', 'completeSetupWizard')
+      .addSeparator()
+      .addItem('⚡ Setup All Triggers', 'setupAllTriggers')
+      .addItem('👁️ View Current Triggers', 'viewCurrentTriggers')
+      .addItem('🧪 Test Triggers', 'testTriggers')
+      .addSeparator()
+      .addItem('📋 Settings Sheet Helper', 'setupConfigurationHelper')
+      .addItem('🔧 Fix Status Values', 'fixInvalidStatusValues')
+      .addItem('🗑️ Clear Config Cache', 'clearConfigCache'))
+    .addSeparator()
     .addItem('ℹ️ Person Sheet Help', 'showPersonSheetHelp')
+    .addItem('ℹ️ About & Features', 'showAboutDialog')
     .addToUi();
+}
+
+function showAboutDialog() {
+  const ui = SpreadsheetApp.getUi();
+  const aboutText =
+    '📊 GOOGLE SHEETS TASK MANAGEMENT SYSTEM\n' +
+    'Version 2.0 - Enhanced & Configurable\n\n' +
+    '✨ KEY FEATURES:\n\n' +
+    '📋 Core Functionality:\n' +
+    '   • Multi-stage task tracking (Carpark → Waiting → To Do → In Progress → Completed)\n' +
+    '   • Interactive person sheets with auto-sync\n' +
+    '   • Pillar/department filtering (Fulfillment view)\n' +
+    '   • Visual Kanban board\n' +
+    '   • Smart priority sorting (handles numeric & text formats)\n\n' +
+    '🔍 New Features:\n' +
+    '   • Advanced search with filters\n' +
+    '   • Analytics dashboard with metrics\n' +
+    '   • Email notifications for due dates\n' +
+    '   • Configurable settings (terminology, ranges)\n' +
+    '   • Performance optimizations with caching\n\n' +
+    '⚙️ Configuration:\n' +
+    '   • All ranges dynamically detected\n' +
+    '   • Customize column names and fields\n' +
+    '   • Easy setup wizard for new users\n\n' +
+    '🚀 Getting Started:\n' +
+    '   1. Go to Task Tools → ⚙️ Configuration → Setup Helper\n' +
+    '   2. Customize your Settings sheet\n' +
+    '   3. Start adding tasks!\n\n' +
+    '📖 Documentation:\n' +
+    'https://github.com/oliveoi1/google-sheets-task-management\n\n' +
+    'Built with ❤️ for productivity';
+  
+  ui.alert('About Task Management System', aboutText, ui.ButtonSet.OK);
 }
 
 function showPersonSheetHelp() {
