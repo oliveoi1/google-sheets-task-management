@@ -256,14 +256,17 @@ function setupConfigurationHelper() {
         .setFontColor('white')
         .setHorizontalAlignment('center');
       
-      // Stage data area
-      settingsSheet.getRange('B4:B9').setValues([
+      // Stage data area with extra rows for customization
+      settingsSheet.getRange('B4:B12').setValues([
         ['Carpark'],
         ['Waiting'],
         ['To Do'],
         ['In Progress'],
         ['Completed'],
-        ['Archived']
+        ['Archived'],
+        [''],  // Extra rows for user
+        [''],
+        ['']
       ]).setBackground('#F5F5F7');
       
       // ==== LABELS SECTION ====
@@ -280,32 +283,35 @@ function setupConfigurationHelper() {
         .setFontColor('white')
         .setHorizontalAlignment('center');
       
-      // Labels data area
-      settingsSheet.getRange('E4:E9').setValues([
+      // Labels data area with extra rows
+      settingsSheet.getRange('E4:E12').setValues([
         ['Urgent'],
         ['Important'],
         ['Low Priority'],
         ['Bug'],
         ['Feature'],
-        ['Documentation']
+        ['Documentation'],
+        [''],  // Extra rows for user
+        [''],
+        ['']
       ]).setBackground('#F5F5F7');
       
-      // ==== TEAM MEMBERS SECTION ====
-      settingsSheet.getRange('A11').setValue('👥 Team Members')
+      // ==== TEAM MEMBERS SECTION ====  
+      settingsSheet.getRange('A14').setValue('👥 Team Members')
         .setFontWeight('bold')
         .setFontSize(12)
         .setBackground('#FF9500')
         .setFontColor('white')
         .setHorizontalAlignment('center');
       
-      settingsSheet.getRange('B11').setValue('Name')
+      settingsSheet.getRange('B14').setValue('Name')
         .setFontWeight('bold')
         .setBackground('#FF9500')
         .setFontColor('white')
         .setHorizontalAlignment('center');
       
       // Team data area
-      settingsSheet.getRange('B12:B20').setValues([
+      settingsSheet.getRange('B15:B23').setValues([
         ['Your Name'],
         ['Team Member 1'],
         ['Team Member 2'],
@@ -318,21 +324,21 @@ function setupConfigurationHelper() {
       ]).setBackground('#FFF5CC');
       
       // ==== PILLARS/DEPARTMENTS SECTION ====
-      settingsSheet.getRange('D11').setValue('🏛️ Pillars/Departments')
+      settingsSheet.getRange('D14').setValue('🏛️ Pillars/Departments (Column G)')
         .setFontWeight('bold')
         .setFontSize(12)
         .setBackground('#FF3B30')
         .setFontColor('white')
         .setHorizontalAlignment('center');
       
-      settingsSheet.getRange('E11').setValue('Pillar Name')
+      settingsSheet.getRange('G14').setValue('Pillar Name')
         .setFontWeight('bold')
         .setBackground('#FF3B30')
         .setFontColor('white')
         .setHorizontalAlignment('center');
       
-      // Pillars data area
-      settingsSheet.getRange('E12:E20').setValues([
+      // Pillars data area - NOTE: This is column G (code reads from G13:G20)
+      settingsSheet.getRange('G15:G23').setValues([
         ['Fulfillment'],
         ['Design'],
         ['Engineering'],
@@ -348,51 +354,57 @@ function setupConfigurationHelper() {
       settingsSheet.setColumnWidth(1, 150);  // A
       settingsSheet.setColumnWidth(2, 150);  // B
       settingsSheet.setColumnWidth(3, 30);   // C (spacer)
-      settingsSheet.setColumnWidth(4, 180);  // D
+      settingsSheet.setColumnWidth(4, 200);  // D
       settingsSheet.setColumnWidth(5, 150);  // E
+      settingsSheet.setColumnWidth(6, 30);   // F (spacer)
+      settingsSheet.setColumnWidth(7, 150);  // G
+      settingsSheet.setColumnWidth(8, 50);   // H (hidden spacer)
+      settingsSheet.setColumnWidth(9, 50);   // I (keep narrow, not used visually)
       
       // ==== INSTRUCTIONS ====
-      settingsSheet.getRange('A22').setValue('ℹ️ Instructions:')
+      settingsSheet.getRange('A25').setValue('ℹ️ Instructions:')
         .setFontWeight('bold')
         .setFontSize(11)
         .setFontColor('#007AFF');
       
-      settingsSheet.getRange('A23').setValue(
+      settingsSheet.getRange('A26').setValue(
         '• Edit the values above to customize your task management system\n' +
-        '• Stage Names: These become your main task sheets\n' +
-        '• Labels: Categories for tasks (Urgent, Bug, etc.)\n' +
-        '• Team Members: People who can be assigned tasks\n' +
-        '• Pillars: Departments or project areas\n' +
+        '• Stage Names (Column B): These become your main task sheets\n' +
+        '• Labels (Column E): Categories for tasks (Urgent, Bug, etc.)\n' +
+        '• Team Members (Column B): People who can be assigned tasks\n' +
+        '• Pillars (Column G): Departments or project areas\n' +
         '• Add more rows as needed by typing below existing entries'
       ).setFontSize(10)
         .setFontColor('#86868B')
         .setWrap(true);
       
-      settingsSheet.setRowHeight(23, 100);
+      settingsSheet.setRowHeight(26, 120);
       
       // ==== BORDERS ====
-      settingsSheet.getRange('A3:B9').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
-      settingsSheet.getRange('D3:E9').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
-      settingsSheet.getRange('A11:B20').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
-      settingsSheet.getRange('D11:E20').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
+      settingsSheet.getRange('A3:B12').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
+      settingsSheet.getRange('D3:E12').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
+      settingsSheet.getRange('A14:B23').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
+      settingsSheet.getRange('D14:G23').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
       
-      // Note: Settings uses OLD column references for backward compatibility
-      // Stage Names: B3:B8 (but we format B4:B9 for data)
-      // Labels: I3:I8 becomes E4:E9 visually (but code reads from I column for old sheets)
-      // Team: E13:E20 becomes B12:B20 visually
-      // Pillars: G13:G20 becomes E12:E20 visually
-      
-      // We need to ALSO populate the old columns for the code to work
-      settingsSheet.getRange('I3:I8').setValues([
+      // Populate the actual data columns that code reads from
+      // Labels: Code reads from I3:I20 (extended range)
+      settingsSheet.getRange('I3:I12').setValues([
         ['Urgent'],
         ['Important'],
         ['Low Priority'],
         ['Bug'],
         ['Feature'],
-        ['Documentation']
+        ['Documentation'],
+        [''],
+        [''],
+        [''],
+        ['']
       ]);
       
-      settingsSheet.getRange('E13:E20').setValues([
+      // Team: Code reads from E13:E23
+      settingsSheet.getRange('E13:E23').setValues([
+        [''],  // E13 blank (code starts E13:E20)
+        [''],
         ['Your Name'],
         ['Team Member 1'],
         ['Team Member 2'],
@@ -400,10 +412,14 @@ function setupConfigurationHelper() {
         ['Team Member 4'],
         ['Team Member 5'],
         ['Team Member 6'],
-        ['Team Member 7']
+        ['Team Member 7'],
+        ['Team Member 8']
       ]);
       
-      settingsSheet.getRange('G13:G20').setValues([
+      // Pillars: Code reads from G13:G23
+      settingsSheet.getRange('G13:G23').setValues([
+        [''],  // G13 blank
+        [''],
         ['Fulfillment'],
         ['Design'],
         ['Engineering'],
@@ -411,7 +427,8 @@ function setupConfigurationHelper() {
         ['Operations'],
         ['Sales'],
         ['Support'],
-        ['Finance']
+        ['Finance'],
+        ['HR']
       ]);
       
       ui.alert('Success!', '✅ Beautifully formatted Settings sheet created!\n\n📝 Please customize the values to match your organization.', ui.ButtonSet.OK);

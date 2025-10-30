@@ -194,21 +194,22 @@ function testTriggers() {
 }
 
 /**
- * Complete setup wizard for new users
- * Walks through entire setup process
+ * Complete setup wizard for new users - STAGE 1: Configuration
+ * Sets up Settings sheet and triggers, then prompts user to customize
  */
 function completeSetupWizard() {
   const ui = SpreadsheetApp.getUi();
   
-  // Step 1: Welcome
+  // Welcome
   const welcome = ui.alert(
     '🎯 Welcome to Task Management Setup!',
-    'This wizard will help you set up your task management system.\n\n' +
-    'We\'ll configure:\n' +
-    '• Settings sheet with your team and stages\n' +
-    '• Required triggers for automation\n' +
-    '• Optional features like notifications\n\n' +
-    'This will take about 2-3 minutes.\n\n' +
+    '📋 STAGE 1: Configuration\n\n' +
+    'First, we\'ll set up your Settings sheet where you can:\n' +
+    '• Define your stage names (To Do, In Progress, etc.)\n' +
+    '• Add your team members\n' +
+    '• Set up departments/pillars\n' +
+    '• Configure labels\n\n' +
+    'After you customize these, we\'ll create the actual task sheets.\n\n' +
     'Ready to begin?',
     ui.ButtonSet.YES_NO
   );
@@ -218,16 +219,16 @@ function completeSetupWizard() {
     return;
   }
   
-  // Step 2: Settings Sheet
+  // Create Settings Sheet
   ui.alert(
-    'Step 1: Settings Sheet',
-    'First, let\'s set up your Settings sheet.\n\n' +
-    'This sheet controls:\n' +
-    '• Stage names (To Do, In Progress, etc.)\n' +
-    '• Team member names\n' +
-    '• Departments/Pillars\n' +
-    '• Labels and categories\n\n' +
-    'Click OK to create/verify Settings sheet.',
+    '📊 Creating Settings Sheet',
+    'Creating a beautifully formatted Settings sheet...\n\n' +
+    'You\'ll be able to customize:\n' +
+    '• Stage names\n' +
+    '• Team members\n' +
+    '• Pillars/Departments  \n' +
+    '• Task labels\n\n' +
+    'Click OK to create.',
     ui.ButtonSet.OK
   );
   
@@ -238,15 +239,13 @@ function completeSetupWizard() {
     return;
   }
   
-  // Step 3: Triggers
+  // Install Triggers
   ui.alert(
-    'Step 2: Install Triggers',
-    'Triggers enable automatic features:\n\n' +
-    '• Menu loading when you open the sheet\n' +
-    '• Interactive editing on person sheets\n' +
-    '• Optional: Daily email notifications\n\n' +
-    'Click OK to install triggers.\n\n' +
-    '⚠️ You may be asked to authorize the script.',
+    '⚡ Installing Triggers',
+    'Now installing automation triggers...\n\n' +
+    '⚠️ You may be asked to authorize the script.\n' +
+    'This is normal and safe.\n\n' +
+    'Click OK to continue.',
     ui.ButtonSet.OK
   );
   
@@ -257,46 +256,103 @@ function completeSetupWizard() {
     return;
   }
   
-  // Step 4: Create Task Sheets
-  const createSheets = ui.alert(
-    'Step 3: Create Task Sheets',
-    'Would you like to automatically create sheets for each stage?\n\n' +
-    'This will create:\n' +
-    '• Carpark\n' +
-    '• Waiting\n' +
-    '• To Do\n' +
-    '• In Progress\n' +
-    '• Completed\n' +
-    '• Archived\n\n' +
-    'Each with proper headers, formatting, and dropdowns pre-applied!',
+  // Prompt to customize
+  const customize = ui.alert(
+    '✅ Stage 1 Complete!',
+    'Settings sheet and triggers are ready!\n\n' +
+    '📝 NEXT STEP: Customize Your Settings\n\n' +
+    'Please go to the "Settings" sheet and:\n' +
+    '1. Replace "Your Name" with actual team member names\n' +
+    '2. Update Pillars/Departments to match your organization\n' +
+    '3. Adjust Stage Names if needed\n' +
+    '4. Modify Labels as desired\n\n' +
+    'When you\'re done customizing, would you like to\n' +
+    'proceed to STAGE 2 (Create Task Sheets)?',
     ui.ButtonSet.YES_NO
   );
   
-  if (createSheets === ui.Button.YES) {
-    try {
-      createTaskSheets();
-      createKanbanBoard();
-    } catch (error) {
-      ui.alert('Error creating sheets: ' + error.message);
-    }
+  if (customize === ui.Button.YES) {
+    createTaskSheetsWizard();
+  } else {
+    ui.alert(
+      '⏸️ Paused at Stage 1',
+      'Perfect! Take your time customizing the Settings sheet.\n\n' +
+      'When you\'re ready to create your task sheets, run:\n\n' +
+      'Task Tools → ⚙️ Configuration → 📋 Create Task Sheets (Stage 2)\n\n' +
+      'This will create all your task sheets based on your\n' +
+      'customized settings.',
+      ui.ButtonSet.OK
+    );
+  }
+}
+
+/**
+ * STAGE 2: Create all task sheets based on Settings
+ * Can be run independently after Stage 1
+ */
+function createTaskSheetsWizard() {
+  const ui = SpreadsheetApp.getUi();
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // Verify Settings sheet exists
+  const settingsSheet = ss.getSheetByName('Settings');
+  if (!settingsSheet) {
+    ui.alert(
+      'Settings Sheet Required',
+      'Please run Stage 1 first:\n\n' +
+      'Task Tools → ⚙️ Configuration → 🎯 Complete Setup Wizard\n\n' +
+      'This will create your Settings sheet.',
+      ui.ButtonSet.OK
+    );
+    return;
   }
   
-  // Step 5: Final Instructions
-  ui.alert(
-    '🎉 Setup Complete!',
-    'Your task management system is ready!\n\n' +
-    '📋 Quick Start Guide:\n' +
-    '1. Customize Settings sheet with your team details\n' +
-    '2. Add tasks using: Task Tools → ➕ Add New Task\n' +
-    '3. Generate person sheets: Task Tools → 👤 Update Person Sheets\n' +
-    '4. Build Kanban: Task Tools → ↻ Rebuild Kanban Board\n\n' +
-    '💡 Tips:\n' +
-    '• Use search to find tasks quickly (🔍 Search Tasks)\n' +
-    '• View analytics anytime (📊 Analytics & Reports)\n' +
-    '• Get help from: ℹ️ About & Features\n\n' +
-    'Happy task managing! 🚀',
-    ui.ButtonSet.OK
+  // Read configuration to show what will be created
+  const config = getConfig();
+  const stages = Object.values(config.stages);
+  
+  const confirm = ui.alert(
+    '📋 STAGE 2: Create Task Sheets',
+    'Ready to create your task sheets!\n\n' +
+    'Based on your Settings, we\'ll create:\n' +
+    stages.map(s => `• ${s}`).join('\n') + '\n' +
+    '• Kanban Board\n\n' +
+    'Each sheet will have:\n' +
+    '✅ Formatted headers\n' +
+    '✅ Pre-applied dropdowns\n' +
+    '✅ Banded rows\n' +
+    '✅ Proper alignment\n\n' +
+    'Continue?',
+    ui.ButtonSet.YES_NO
   );
+  
+  if (confirm !== ui.Button.YES) {
+    ui.alert('Cancelled. You can run this anytime from:\nTask Tools → ⚙️ Configuration → Create Task Sheets (Stage 2)');
+    return;
+  }
+  
+  try {
+    ui.alert('Creating sheets...', 'This may take a few seconds...', ui.ButtonSet.OK);
+    createTaskSheets();
+    createKanbanBoard();
+    
+    ui.alert(
+      '🎉 Setup Complete!',
+      'All done! Your task management system is ready.\n\n' +
+      '✅ Task sheets created for each stage\n' +
+      '✅ Kanban Board created\n' +
+      '✅ Dropdowns pre-applied\n' +
+      '✅ Professional formatting applied\n\n' +
+      '🚀 Next Steps:\n' +
+      '1. Add your first task: Task Tools → ➕ Add New Task\n' +
+      '2. Generate person sheets: Task Tools → 👤 Update Person Sheets\n' +
+      '3. View your Kanban board\n\n' +
+      'Need help? Task Tools → ℹ️ About & Features',
+      ui.ButtonSet.OK
+    );
+  } catch (error) {
+    ui.alert('Error creating sheets: ' + error.message);
+  }
 }
 
 /**
