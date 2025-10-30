@@ -428,8 +428,23 @@ function updatePersonSheets() {
 
     // Get list of people from Settings!B15:B23 (Team Members)
     const peopleData = settingsSheet.getRange('B15:B23').getValues().flat().filter(String);
+    
+    // Debug: Show what was found
+    Logger.log('People found in B15:B23: ' + JSON.stringify(peopleData));
+    
     if (peopleData.length === 0) {
       SpreadsheetApp.getUi().alert('No people found in Settings!B15:B23 (Team Members section)');
+      return;
+    }
+    
+    // Show confirmation of what will be created
+    const ui = SpreadsheetApp.getUi();
+    const confirmMessage = `Found ${peopleData.length} person(s) in Settings!B15:B23:\n\n` +
+                          peopleData.map((p, i) => `${i+1}. ${p}`).join('\n') +
+                          `\n\nCreate/update sheets for these people?`;
+    const result = ui.alert('Confirm Person Sheets', confirmMessage, ui.ButtonSet.YES_NO);
+    
+    if (result !== ui.Button.YES) {
       return;
     }
 
