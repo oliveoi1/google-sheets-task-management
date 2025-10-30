@@ -33,10 +33,10 @@ function getDropdownOptions() {
     if (!sheet) {
       throw new Error('Settings sheet not found');
     }
-    const statuses = sheet.getRange('B3:B8').getValues().flat().filter(String);
-    const labels = sheet.getRange('I3:I8').getValues().flat().filter(String);
-    const pillars = sheet.getRange('G13:G20').getValues().flat().filter(String);
-    const people = sheet.getRange('E13:E20').getValues().flat().filter(String);
+    const statuses = sheet.getRange('B4:B12').getValues().flat().filter(String);
+    const labels = sheet.getRange('E4:E12').getValues().flat().filter(String);
+    const pillars = sheet.getRange('G15:G23').getValues().flat().filter(String);
+    const people = sheet.getRange('B15:B23').getValues().flat().filter(String);
     return { statuses, labels, pillars, people };
 
   } catch (error) {

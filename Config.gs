@@ -146,12 +146,12 @@ function getCustomColumnConfig(settingsSheet) {
     return {
       label: {
         displayName: 'Label',
-        dataRange: 'I3:I20', // Where dropdown options are stored
+        dataRange: 'E4:E12', // Read from visual column E (rows 4-12)
         enabled: true
       },
       pillar: {
         displayName: 'Pillar', // Users could change this to "Department", "Category", etc.
-        dataRange: 'G13:G20',
+        dataRange: 'G15:G23', // Read from visual column G (rows 15-23)
         enabled: true
       },
       // Future: Allow users to add more custom columns
@@ -169,8 +169,8 @@ function getCustomColumnConfig(settingsSheet) {
  */
 function getPeopleList(settingsSheet) {
   try {
-    // Find people in Settings!E13:E50 (extended range for flexibility)
-    const peopleData = settingsSheet.getRange('E13:E50').getValues()
+    // Find people in Settings!B15:B23 (visual column where users edit)
+    const peopleData = settingsSheet.getRange('B15:B23').getValues()
       .flat()
       .filter(String)
       .map(name => name.toString().trim());
@@ -188,9 +188,9 @@ function getPeopleList(settingsSheet) {
 function getDropdownData(settingsSheet) {
   try {
     return {
-      statuses: settingsSheet.getRange('B3:B8').getValues().flat().filter(String),
-      labels: settingsSheet.getRange('I3:I20').getValues().flat().filter(String),
-      pillars: settingsSheet.getRange('G13:G20').getValues().flat().filter(String),
+      statuses: settingsSheet.getRange('B4:B12').getValues().flat().filter(String),
+      labels: settingsSheet.getRange('E4:E12').getValues().flat().filter(String),
+      pillars: settingsSheet.getRange('G15:G23').getValues().flat().filter(String),
       people: getPeopleList(settingsSheet)
     };
   } catch (error) {
@@ -372,10 +372,10 @@ function setupConfigurationHelper() {
       
       settingsSheet.getRange('A26').setValue(
         '• Edit the values above to customize your task management system\n' +
-        '• Stage Names (Column B): These become your main task sheets\n' +
-        '• Labels (Column E): Categories for tasks (Urgent, Bug, etc.)\n' +
-        '• Team Members (Column B): People who can be assigned tasks\n' +
-        '• Pillars (Column G): Departments or project areas\n' +
+        '• Stage Names (Column B, rows 4-12): These become your main task sheets\n' +
+        '• Labels (Column E, rows 4-12): Categories for tasks (Urgent, Bug, etc.)\n' +
+        '• Team Members (Column B, rows 15-23): People who can be assigned tasks\n' +
+        '• Pillars (Column G, rows 15-23): Departments or project areas\n' +
         '• Add more rows as needed by typing below existing entries'
       ).setFontSize(10)
         .setFontColor('#86868B')
@@ -388,51 +388,6 @@ function setupConfigurationHelper() {
       settingsSheet.getRange('D3:E12').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
       settingsSheet.getRange('A14:B23').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
       settingsSheet.getRange('D14:G23').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
-      
-      // Populate the actual data columns that code reads from
-      // Labels: Code reads from I3:I20 (extended range)
-      settingsSheet.getRange('I3:I12').setValues([
-        ['Urgent'],
-        ['Important'],
-        ['Low Priority'],
-        ['Bug'],
-        ['Feature'],
-        ['Documentation'],
-        [''],
-        [''],
-        [''],
-        ['']
-      ]);
-      
-      // Team: Code reads from E13:E23
-      settingsSheet.getRange('E13:E23').setValues([
-        [''],  // E13 blank (code starts E13:E20)
-        [''],
-        ['Your Name'],
-        ['Team Member 1'],
-        ['Team Member 2'],
-        ['Team Member 3'],
-        ['Team Member 4'],
-        ['Team Member 5'],
-        ['Team Member 6'],
-        ['Team Member 7'],
-        ['Team Member 8']
-      ]);
-      
-      // Pillars: Code reads from G13:G23
-      settingsSheet.getRange('G13:G23').setValues([
-        [''],  // G13 blank
-        [''],
-        ['Fulfillment'],
-        ['Design'],
-        ['Engineering'],
-        ['Marketing'],
-        ['Operations'],
-        ['Sales'],
-        ['Support'],
-        ['Finance'],
-        ['HR']
-      ]);
       
       ui.alert('Success!', '✅ Beautifully formatted Settings sheet created!\n\n📝 Please customize the values to match your organization.', ui.ButtonSet.OK);
     }
