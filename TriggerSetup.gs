@@ -268,13 +268,14 @@ function completeSetupWizard() {
     '• In Progress\n' +
     '• Completed\n' +
     '• Archived\n\n' +
-    'Each with proper headers and formatting.',
+    'Each with proper headers, formatting, and dropdowns pre-applied!',
     ui.ButtonSet.YES_NO
   );
   
   if (createSheets === ui.Button.YES) {
     try {
       createTaskSheets();
+      createKanbanBoard();
     } catch (error) {
       ui.alert('Error creating sheets: ' + error.message);
     }
@@ -299,7 +300,7 @@ function completeSetupWizard() {
 }
 
 /**
- * Create all task stage sheets with proper formatting
+ * Create all task stage sheets with proper formatting and dropdowns
  */
 function createTaskSheets() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -317,19 +318,23 @@ function createTaskSheets() {
       // Add title
       sheet.getRange('A1').setValue(`${stageName} Tasks`)
         .setFontWeight('bold')
-        .setFontSize(14);
+        .setFontSize(14)
+        .setFontFamily('Arial');
       
       // Add instructions
-      sheet.getRange('A2').setValue('Add tasks below. Use dropdowns in columns D (Label), E (Pillar), F (Who), H (Status)')
+      sheet.getRange('A2').setValue('Add tasks below. Dropdowns will appear in Label, Pillar, Who, and Status columns')
         .setFontSize(10)
-        .setFontStyle('italic');
+        .setFontStyle('italic')
+        .setFontColor('#86868B');
       
       // Add headers in row 4
       const headerRange = sheet.getRange(4, 1, 1, headers.length);
       headerRange.setValues([headers]);
       headerRange.setFontWeight('bold');
-      headerRange.setBackground('#4a86e8');
+      headerRange.setBackground('#007AFF');
       headerRange.setFontColor('white');
+      headerRange.setHorizontalAlignment('center');
+      headerRange.setFontFamily('Arial');
       
       // Set column widths
       sheet.setColumnWidth(1, 250);  // Task
@@ -344,14 +349,58 @@ function createTaskSheets() {
       sheet.setColumnWidth(10, 120); // Last Updated
       sheet.setColumnWidth(11, 120); // Created Date
       
+      // Apply banded rows (prepare for future data)
+      const range = sheet.getRange(4, 1, 20, headers.length);
+      range.applyRowBanding(SpreadsheetApp.BandingTheme.LIGHT_GREY);
+      
+      // Set up dropdowns for first 10 empty rows
+      for (let i = 5; i <= 14; i++) {
+        setupTaskRowValidation(sheet, i);
+      }
+      
       // Freeze header rows
       sheet.setFrozenRows(4);
+      
+      // Center align Priority and date columns
+      sheet.getRange('C5:C').setHorizontalAlignment('center');
+      sheet.getRange('G5:K').setHorizontalAlignment('center');
       
       Logger.log(`Created sheet: ${stageName}`);
     }
   });
   
-  SpreadsheetApp.getActive().toast(`✅ Created ${stages.length} task sheets`);
+  SpreadsheetApp.getActive().toast(`✅ Created ${stages.length} task sheets with dropdowns`);
+}
+
+/**
+ * Create and format Kanban Board sheet
+ */
+function createKanbanBoard() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let kanbanSheet = ss.getSheetByName('Kanban Board');
+  
+  if (!kanbanSheet) {
+    kanbanSheet = ss.insertSheet('Kanban Board');
+    
+    // Add title
+    kanbanSheet.getRange('B1').setValue("Overview of Tasks")
+      .setFontWeight('bold')
+      .setFontSize(14)
+      .setFontFamily('Arial');
+    
+    // Add instructions
+    kanbanSheet.getRange('J1')
+      .setValue('This is a snapshot. To update go to the "Task Tools" menu')
+      .setFontSize(10)
+      .setHorizontalAlignment('right')
+      .setFontStyle('italic')
+      .setFontColor('#86868B');
+    
+    SpreadsheetApp.getActive().toast('✅ Kanban Board created');
+  }
+  
+  // Build it with current data
+  rebuildKanbanBoard();
 }
 
 /**

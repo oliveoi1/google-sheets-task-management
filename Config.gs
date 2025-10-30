@@ -217,7 +217,7 @@ function getTaskSheets() {
 
 /**
  * Setup function to help new users configure the system
- * Creates a template Settings sheet if one doesn't exist
+ * Creates a beautifully formatted Settings sheet
  */
 function setupConfigurationHelper() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -228,29 +228,161 @@ function setupConfigurationHelper() {
   if (!settingsSheet) {
     const result = ui.alert(
       'Settings Sheet Not Found',
-      'Would you like to create a template Settings sheet with default configuration?',
+      'Would you like to create a formatted Settings sheet with default configuration?',
       ui.ButtonSet.YES_NO
     );
     
     if (result === ui.Button.YES) {
       settingsSheet = ss.insertSheet('Settings');
       
-      // Create template structure
-      settingsSheet.getRange('A1').setValue('Task Management Configuration').setFontWeight('bold').setFontSize(14);
+      // ==== TITLE ====
+      settingsSheet.getRange('A1').setValue('📊 Task Management Configuration')
+        .setFontWeight('bold')
+        .setFontSize(16)
+        .setFontFamily('Arial')
+        .setFontColor('#1D1D1F');
       
-      // Stage names
-      settingsSheet.getRange('A3').setValue('Stage Names:').setFontWeight('bold');
-      settingsSheet.getRange('B3:B8').setValues([
+      // ==== STAGE NAMES SECTION ====
+      settingsSheet.getRange('A3').setValue('📋 Stage Names')
+        .setFontWeight('bold')
+        .setFontSize(12)
+        .setBackground('#007AFF')
+        .setFontColor('white')
+        .setHorizontalAlignment('center');
+      
+      settingsSheet.getRange('B3').setValue('Stage Name')
+        .setFontWeight('bold')
+        .setBackground('#007AFF')
+        .setFontColor('white')
+        .setHorizontalAlignment('center');
+      
+      // Stage data area
+      settingsSheet.getRange('B4:B9').setValues([
         ['Carpark'],
         ['Waiting'],
         ['To Do'],
         ['In Progress'],
         ['Completed'],
         ['Archived']
-      ]);
+      ]).setBackground('#F5F5F7');
       
-      // Labels
-      settingsSheet.getRange('H3').setValue('Labels:').setFontWeight('bold');
+      // ==== LABELS SECTION ====
+      settingsSheet.getRange('D3').setValue('🏷️ Task Labels')
+        .setFontWeight('bold')
+        .setFontSize(12)
+        .setBackground('#34C759')
+        .setFontColor('white')
+        .setHorizontalAlignment('center');
+      
+      settingsSheet.getRange('E3').setValue('Label Name')
+        .setFontWeight('bold')
+        .setBackground('#34C759')
+        .setFontColor('white')
+        .setHorizontalAlignment('center');
+      
+      // Labels data area
+      settingsSheet.getRange('E4:E9').setValues([
+        ['Urgent'],
+        ['Important'],
+        ['Low Priority'],
+        ['Bug'],
+        ['Feature'],
+        ['Documentation']
+      ]).setBackground('#F5F5F7');
+      
+      // ==== TEAM MEMBERS SECTION ====
+      settingsSheet.getRange('A11').setValue('👥 Team Members')
+        .setFontWeight('bold')
+        .setFontSize(12)
+        .setBackground('#FF9500')
+        .setFontColor('white')
+        .setHorizontalAlignment('center');
+      
+      settingsSheet.getRange('B11').setValue('Name')
+        .setFontWeight('bold')
+        .setBackground('#FF9500')
+        .setFontColor('white')
+        .setHorizontalAlignment('center');
+      
+      // Team data area
+      settingsSheet.getRange('B12:B20').setValues([
+        ['Your Name'],
+        ['Team Member 1'],
+        ['Team Member 2'],
+        ['Team Member 3'],
+        ['Team Member 4'],
+        ['Team Member 5'],
+        ['Team Member 6'],
+        ['Team Member 7'],
+        ['Team Member 8']
+      ]).setBackground('#FFF5CC');
+      
+      // ==== PILLARS/DEPARTMENTS SECTION ====
+      settingsSheet.getRange('D11').setValue('🏛️ Pillars/Departments')
+        .setFontWeight('bold')
+        .setFontSize(12)
+        .setBackground('#FF3B30')
+        .setFontColor('white')
+        .setHorizontalAlignment('center');
+      
+      settingsSheet.getRange('E11').setValue('Pillar Name')
+        .setFontWeight('bold')
+        .setBackground('#FF3B30')
+        .setFontColor('white')
+        .setHorizontalAlignment('center');
+      
+      // Pillars data area
+      settingsSheet.getRange('E12:E20').setValues([
+        ['Fulfillment'],
+        ['Design'],
+        ['Engineering'],
+        ['Marketing'],
+        ['Operations'],
+        ['Sales'],
+        ['Support'],
+        ['Finance'],
+        ['HR']
+      ]).setBackground('#FFF5CC');
+      
+      // ==== COLUMN WIDTHS ====
+      settingsSheet.setColumnWidth(1, 150);  // A
+      settingsSheet.setColumnWidth(2, 150);  // B
+      settingsSheet.setColumnWidth(3, 30);   // C (spacer)
+      settingsSheet.setColumnWidth(4, 180);  // D
+      settingsSheet.setColumnWidth(5, 150);  // E
+      
+      // ==== INSTRUCTIONS ====
+      settingsSheet.getRange('A22').setValue('ℹ️ Instructions:')
+        .setFontWeight('bold')
+        .setFontSize(11)
+        .setFontColor('#007AFF');
+      
+      settingsSheet.getRange('A23').setValue(
+        '• Edit the values above to customize your task management system\n' +
+        '• Stage Names: These become your main task sheets\n' +
+        '• Labels: Categories for tasks (Urgent, Bug, etc.)\n' +
+        '• Team Members: People who can be assigned tasks\n' +
+        '• Pillars: Departments or project areas\n' +
+        '• Add more rows as needed by typing below existing entries'
+      ).setFontSize(10)
+        .setFontColor('#86868B')
+        .setWrap(true);
+      
+      settingsSheet.setRowHeight(23, 100);
+      
+      // ==== BORDERS ====
+      settingsSheet.getRange('A3:B9').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
+      settingsSheet.getRange('D3:E9').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
+      settingsSheet.getRange('A11:B20').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
+      settingsSheet.getRange('D11:E20').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
+      
+      // Note: Settings uses OLD column references for backward compatibility
+      // Stage Names: B3:B8 (but we format B4:B9 for data)
+      // Labels: I3:I8 becomes E4:E9 visually (but code reads from I column for old sheets)
+      // Team: E13:E20 becomes B12:B20 visually
+      // Pillars: G13:G20 becomes E12:E20 visually
+      
+      // We need to ALSO populate the old columns for the code to work
       settingsSheet.getRange('I3:I8').setValues([
         ['Urgent'],
         ['Important'],
@@ -260,25 +392,29 @@ function setupConfigurationHelper() {
         ['Documentation']
       ]);
       
-      // Pillars/Departments
-      settingsSheet.getRange('F13').setValue('Pillars/Departments:').setFontWeight('bold');
-      settingsSheet.getRange('G13:G16').setValues([
+      settingsSheet.getRange('E13:E20').setValues([
+        ['Your Name'],
+        ['Team Member 1'],
+        ['Team Member 2'],
+        ['Team Member 3'],
+        ['Team Member 4'],
+        ['Team Member 5'],
+        ['Team Member 6'],
+        ['Team Member 7']
+      ]);
+      
+      settingsSheet.getRange('G13:G20').setValues([
         ['Fulfillment'],
         ['Design'],
         ['Engineering'],
-        ['Marketing']
+        ['Marketing'],
+        ['Operations'],
+        ['Sales'],
+        ['Support'],
+        ['Finance']
       ]);
       
-      // Team Members
-      settingsSheet.getRange('D13').setValue('Team Members:').setFontWeight('bold');
-      settingsSheet.getRange('E13:E16').setValues([
-        ['Allan'],
-        ['Janine'],
-        ['Team Member 3'],
-        ['Team Member 4']
-      ]);
-      
-      ui.alert('Success!', 'Template Settings sheet created. Please customize it to match your organization.', ui.ButtonSet.OK);
+      ui.alert('Success!', '✅ Beautifully formatted Settings sheet created!\n\n📝 Please customize the values to match your organization.', ui.ButtonSet.OK);
     }
   } else {
     ui.alert(

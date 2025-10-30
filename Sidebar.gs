@@ -1,7 +1,29 @@
 function showTaskSidebar() {
-  const html = HtmlService.createHtmlOutputFromFile('TaskSidebar')
-    .setTitle('Add Task');
-  SpreadsheetApp.getUi().showSidebar(html);
+  try {
+    // Check if Settings sheet exists
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const settingsSheet = ss.getSheetByName('Settings');
+    
+    if (!settingsSheet) {
+      SpreadsheetApp.getUi().alert(
+        'Settings Sheet Required',
+        'Please run the Setup Wizard first:\n\n' +
+        'Task Tools → ⚙️ Configuration → 🎯 Complete Setup Wizard\n\n' +
+        'This will create your Settings sheet and task sheets.',
+        SpreadsheetApp.getUi().ButtonSet.OK
+      );
+      return;
+    }
+    
+    const html = HtmlService.createHtmlOutputFromFile('TaskSidebar')
+      .setTitle('Add Task')
+      .setWidth(300);
+    SpreadsheetApp.getUi().showSidebar(html);
+    
+  } catch (error) {
+    Logger.log('showTaskSidebar error: ' + error);
+    SpreadsheetApp.getUi().alert('Error showing sidebar: ' + error.message);
+  }
 }
 
 function getDropdownOptions() {
