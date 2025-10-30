@@ -98,8 +98,8 @@ function clearConfigCache() {
  */
 function getStageNames(settingsSheet) {
   try {
-    // Try to find stage names in Settings!B3:B20 (flexible range)
-    const stageData = settingsSheet.getRange('B3:B20').getValues().flat().filter(String);
+    // Try to find stage names in Settings!B4:B20 (flexible range, skip header in B3)
+    const stageData = settingsSheet.getRange('B4:B20').getValues().flat().filter(String);
     
     if (stageData.length === 0) {
       // Fallback to default stage names

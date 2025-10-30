@@ -1,16 +1,11 @@
 // ====== SETTINGS ======
 
-// Required sheet structure:
-
-// - Settings!B3:B8 = Status names (Carpark, Waiting, etc.)
-
-// - Settings!C3:C8 = Completed task count
-
-// - Settings!D3:D8 = Total task count
-
-// - Settings!E3:E8 = Total task ceiling
-
-// - SPARKLINE built as: {completed, total-completed}
+// Settings sheet structure:
+// - B3 = "Stage Name" header, B4:B12 = Stage names (Carpark, Waiting, To Do, etc.)
+// - E3 = "Label Name" header, E4:E12 = Task labels (Urgent, Bug, Feature, etc.)
+// - B14 = "Name" header, B15:B23 = Team member names
+// - E14 = "Pillar Name" header, E15:E23 = Pillar/Department names
+// Task counts are calculated dynamically from each sheet
 
 // ====== CONSTANTS ======
 const SHEET_NAMES = {
@@ -1092,24 +1087,31 @@ function rebuildKanbanBoard() {
   statusOrder.forEach((status, i) => {
     const col = columnMap[status];
     const colors = colorMap[status];
-    const settingsRow = i + 3;
     const sheet = ss.getSheetByName(status);
     if (!sheet) {
       Logger.log(`Warning: Sheet "${status}" not found, skipping in Kanban.`);
       return;
     }
-    const completed = Number(settingsSheet.getRange(`C${settingsRow}`).getValue());
-    const total = Number(settingsSheet.getRange(`E${settingsRow}`).getValue());
+    
+    // Count tasks dynamically from the sheet
+    const lastRow = sheet.getLastRow();
+    const taskCount = lastRow >= DATA_START_ROW ? 
+      sheet.getRange(DATA_START_ROW, 1, lastRow - DATA_START_ROW + 1, 1)
+        .getValues()
+        .filter(row => row[0] && row[0].toString().trim() !== '')
+        .length : 0;
+    
+    const completed = taskCount;
+    const total = taskCount;
     const displayCount = completed;
 
-    // Sparkline and header
-    kanbanSheet.getRange(3, col).setFormula(`=SPARKLINE(Settings!C${settingsRow}:D${settingsRow},{"charttype","bar";"color1","${colors.light}";"color2","d9d9d9"})`)
+    // Task count and status header
+    kanbanSheet.getRange(3, col).setValue(`${taskCount} tasks`)
       .setBackground("#eeeeee")
-      .setHorizontalAlignment("center");
-    kanbanSheet.getRange(4, col).setValue(`${completed}/${total}`)
       .setHorizontalAlignment("center")
-      .setFontSize(10);
-    kanbanSheet.getRange(5, col).setFormula(`=HYPERLINK("#gid=${sheet.getSheetId()}", "${status}")`)
+      .setFontSize(10)
+      .setFontWeight("bold");
+    kanbanSheet.getRange(4, col).setFormula(`=HYPERLINK("#gid=${sheet.getSheetId()}", "${status}")`)
       .setFontWeight("bold")
       .setFontSize(11)
       .setFontColor("white")
@@ -1123,7 +1125,7 @@ function rebuildKanbanBoard() {
       .filter(row => row[COLUMNS.TASK - 1]); // Task Title column
     const showTasks = taskRows.slice(0, displayCount);
     showTasks.forEach((row, idx) => {
-      const r = START_ROW + idx + 1;
+      const r = 5 + idx; // Tasks start at row 5 on Kanban board
       const cell = kanbanSheet.getRange(r, col);
       const isUrgent = (row[COLUMNS.LABEL - 1] || "").toString().toLowerCase().includes("urgent");
       const bg = isUrgent ? colors.urgent : colors.light;
