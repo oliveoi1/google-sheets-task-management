@@ -90,11 +90,6 @@ function searchTasks(query, filters = {}) {
 // ========== EMAIL NOTIFICATIONS ========== 
 // EMAIL NOTIFICATIONS DISABLED BY USER REQUEST
 /*
-/**
- * Check for upcoming and overdue tasks and send email notifications
- * Should be set up as a time-driven trigger (daily)
- */
-/*
 function sendDueDateNotifications() {
   try {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -192,9 +187,7 @@ function sendDueDateNotifications() {
   }
 }
 
-/**
- * Send notification email to a person
- */
+// Send notification email to a person
 function sendNotificationEmail(person, notifications, spreadsheet) {
   // Note: This requires the person's email. You'd need to add email mapping in Settings
   // For now, we'll log it. Users can extend this with their email lookup logic
@@ -216,9 +209,7 @@ function sendNotificationEmail(person, notifications, spreadsheet) {
   // }
 }
 
-/**
- * Build notification email body
- */
+// Build notification email body
 function buildNotificationEmailBody(person, notifications, spreadsheet) {
   let body = `Hi ${person},\n\n`;
   body += `Here are your task reminders from "${spreadsheet.getName()}":\n\n`;
@@ -436,11 +427,6 @@ function collectAnalyticsMetrics(config) {
   return metrics;
 }
 
-/*
-/**
- * Install time-driven trigger for daily email notifications
- * Run this once to set up automatic notifications
- */
 /*
 function installDailyNotificationTrigger() {
   // Delete existing triggers for this function
