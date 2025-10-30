@@ -1119,8 +1119,7 @@ function rebuildKanbanBoard() {
       .setHorizontalAlignment("center");
     kanbanSheet.setColumnWidth(col, 180);
 
-    // Extract tasks
-    const lastRow = sheet.getLastRow();
+    // Extract tasks (reuse lastRow from above)
     const taskRows = sheet.getRange(DATA_START_ROW, 1, Math.max(0, lastRow - DATA_START_ROW + 1), 9).getValues()
       .filter(row => row[COLUMNS.TASK - 1]); // Task Title column
     const showTasks = taskRows.slice(0, displayCount);
