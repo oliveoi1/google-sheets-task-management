@@ -87,12 +87,14 @@ function searchTasks(query, filters = {}) {
   }
 }
 
-// ========== EMAIL NOTIFICATIONS ==========
-
+// ========== EMAIL NOTIFICATIONS ========== 
+// EMAIL NOTIFICATIONS DISABLED BY USER REQUEST
+/*
 /**
  * Check for upcoming and overdue tasks and send email notifications
  * Should be set up as a time-driven trigger (daily)
  */
+/*
 function sendDueDateNotifications() {
   try {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -258,6 +260,8 @@ function buildNotificationEmailBody(person, notifications, spreadsheet) {
   
   return body;
 }
+*/
+// END EMAIL NOTIFICATIONS
 
 // ========== ANALYTICS & REPORTING ==========
 
@@ -432,10 +436,12 @@ function collectAnalyticsMetrics(config) {
   return metrics;
 }
 
+/*
 /**
  * Install time-driven trigger for daily email notifications
  * Run this once to set up automatic notifications
  */
+/*
 function installDailyNotificationTrigger() {
   // Delete existing triggers for this function
   const triggers = ScriptApp.getProjectTriggers();
@@ -454,4 +460,5 @@ function installDailyNotificationTrigger() {
   
   SpreadsheetApp.getUi().alert('Daily notification trigger installed! Notifications will be sent at 8 AM daily.');
 }
+*/
 

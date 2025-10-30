@@ -35,7 +35,7 @@ function getDropdownOptions() {
     }
     const statuses = sheet.getRange('B4:B12').getValues().flat().filter(String);
     const labels = sheet.getRange('E4:E12').getValues().flat().filter(String);
-    const pillars = sheet.getRange('G15:G23').getValues().flat().filter(String);
+    const pillars = sheet.getRange('E15:E23').getValues().flat().filter(String);
     const people = sheet.getRange('B15:B23').getValues().flat().filter(String);
     return { statuses, labels, pillars, people };
 

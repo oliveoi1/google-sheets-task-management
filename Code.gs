@@ -184,9 +184,7 @@ function onOpen() {
     .addItem('↕ Resort Tasks', 'resortAllTaskTabs')
     .addSeparator()
     .addSubMenu(ui.createMenu('📊 Analytics & Reports')
-      .addItem('📈 Generate Analytics', 'generateAnalytics')
-      .addItem('📧 Setup Email Notifications', 'installDailyNotificationTrigger')
-      .addItem('✉️ Send Test Notification', 'sendDueDateNotifications'))
+      .addItem('📈 Generate Analytics', 'generateAnalytics'))
     .addSeparator()
     .addSubMenu(ui.createMenu('⚙️ Configuration')
       .addItem('🎯 Complete Setup Wizard (Stage 1)', 'completeSetupWizard')
@@ -220,7 +218,6 @@ function showAboutDialog() {
     '🔍 New Features:\n' +
     '   • Advanced search with filters\n' +
     '   • Analytics dashboard with metrics\n' +
-    '   • Email notifications for due dates\n' +
     '   • Configurable settings (terminology, ranges)\n' +
     '   • Performance optimizations with caching\n\n' +
     '⚙️ Configuration:\n' +

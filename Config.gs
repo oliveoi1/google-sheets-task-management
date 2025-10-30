@@ -151,7 +151,7 @@ function getCustomColumnConfig(settingsSheet) {
       },
       pillar: {
         displayName: 'Pillar', // Users could change this to "Department", "Category", etc.
-        dataRange: 'G15:G23', // Read from visual column G (rows 15-23)
+        dataRange: 'E15:E23', // Read from visual column E (rows 15-23)
         enabled: true
       },
       // Future: Allow users to add more custom columns
@@ -190,7 +190,7 @@ function getDropdownData(settingsSheet) {
     return {
       statuses: settingsSheet.getRange('B4:B12').getValues().flat().filter(String),
       labels: settingsSheet.getRange('E4:E12').getValues().flat().filter(String),
-      pillars: settingsSheet.getRange('G15:G23').getValues().flat().filter(String),
+      pillars: settingsSheet.getRange('E15:E23').getValues().flat().filter(String),
       people: getPeopleList(settingsSheet)
     };
   } catch (error) {
@@ -310,38 +310,26 @@ function setupConfigurationHelper() {
         .setFontColor('white')
         .setHorizontalAlignment('center');
       
-      // Team data area
-      settingsSheet.getRange('B15:B23').setValues([
-        ['Your Name'],
-        ['Team Member 1'],
-        ['Team Member 2'],
-        ['Team Member 3'],
-        ['Team Member 4'],
-        ['Team Member 5'],
-        ['Team Member 6'],
-        ['Team Member 7'],
-        ['Team Member 8']
-      ]).setBackground('#F0EBE6');  // Soft warm beige
+      // Team data area - only "Your Name" in B15, rest empty
+      settingsSheet.getRange('B15').setValue('Your Name').setBackground('#F0EBE6');
+      settingsSheet.getRange('B16:B23').setBackground('#F0EBE6');  // Empty but styled
       
       // ==== PILLARS/DEPARTMENTS SECTION ====
-      // Clear columns D and E in the Team/Pillar section to avoid duplicates
-      settingsSheet.getRange('D15:E23').clearContent();
-      
-      settingsSheet.getRange('D14').setValue('🏛️ Pillars/Departments (Column G)')
+      settingsSheet.getRange('D14').setValue('🏛️ Pillars/Departments')
         .setFontWeight('bold')
         .setFontSize(12)
         .setBackground('#8B9DAF')  // Soft slate blue
         .setFontColor('white')
         .setHorizontalAlignment('center');
       
-      settingsSheet.getRange('G14').setValue('Pillar Name')
+      settingsSheet.getRange('E14').setValue('Pillar Name')
         .setFontWeight('bold')
         .setBackground('#8B9DAF')  // Soft slate blue
         .setFontColor('white')
         .setHorizontalAlignment('center');
       
-      // Pillars data area - NOTE: This is column G (code reads from G13:G20)
-      settingsSheet.getRange('G15:G23').setValues([
+      // Pillars data area in column E
+      settingsSheet.getRange('E15:E23').setValues([
         ['Fulfillment'],
         ['Design'],
         ['Engineering'],
@@ -359,10 +347,6 @@ function setupConfigurationHelper() {
       settingsSheet.setColumnWidth(3, 30);   // C (spacer)
       settingsSheet.setColumnWidth(4, 200);  // D
       settingsSheet.setColumnWidth(5, 150);  // E
-      settingsSheet.setColumnWidth(6, 30);   // F (spacer)
-      settingsSheet.setColumnWidth(7, 150);  // G
-      settingsSheet.setColumnWidth(8, 50);   // H (hidden spacer)
-      settingsSheet.setColumnWidth(9, 50);   // I (keep narrow, not used visually)
       
       // ==== INSTRUCTIONS ====
       settingsSheet.getRange('A25').setValue('ℹ️ Instructions:')
@@ -374,8 +358,8 @@ function setupConfigurationHelper() {
         '• Edit the values above to customize your task management system\n' +
         '• Stage Names (Column B, rows 4-12): These become your main task sheets\n' +
         '• Labels (Column E, rows 4-12): Categories for tasks (Urgent, Bug, etc.)\n' +
-        '• Team Members (Column B, rows 15-23): People who can be assigned tasks\n' +
-        '• Pillars (Column G, rows 15-23): Departments or project areas\n' +
+        '• Team Members (Column B, row 15): Add your name or team member names\n' +
+        '• Pillars (Column E, rows 15-23): Departments or project areas\n' +
         '• Add more rows as needed by typing below existing entries'
       ).setFontSize(10)
         .setFontColor('#86868B')
@@ -387,7 +371,7 @@ function setupConfigurationHelper() {
       settingsSheet.getRange('A3:B12').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
       settingsSheet.getRange('D3:E12').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
       settingsSheet.getRange('A14:B23').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
-      settingsSheet.getRange('D14:G23').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
+      settingsSheet.getRange('D14:E23').setBorder(true, true, true, true, true, true, '#E5E5E7', SpreadsheetApp.BorderStyle.SOLID);
       
       ui.alert('Success!', '✅ Beautifully formatted Settings sheet created!\n\n📝 Please customize the values to match your organization.', ui.ButtonSet.OK);
     }
