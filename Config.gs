@@ -246,13 +246,13 @@ function setupConfigurationHelper() {
       settingsSheet.getRange('A3').setValue('📋 Stage Names')
         .setFontWeight('bold')
         .setFontSize(12)
-        .setBackground('#007AFF')
+        .setBackground('#7D9D8E')  // Sage green
         .setFontColor('white')
         .setHorizontalAlignment('center');
       
       settingsSheet.getRange('B3').setValue('Stage Name')
         .setFontWeight('bold')
-        .setBackground('#007AFF')
+        .setBackground('#7D9D8E')  // Sage green
         .setFontColor('white')
         .setHorizontalAlignment('center');
       
@@ -267,19 +267,19 @@ function setupConfigurationHelper() {
         [''],  // Extra rows for user
         [''],
         ['']
-      ]).setBackground('#F5F5F7');
+      ]).setBackground('#E8EFE8');  // Soft sage tint
       
       // ==== LABELS SECTION ====
       settingsSheet.getRange('D3').setValue('🏷️ Task Labels')
         .setFontWeight('bold')
         .setFontSize(12)
-        .setBackground('#34C759')
+        .setBackground('#A8B89F')  // Soft moss green
         .setFontColor('white')
         .setHorizontalAlignment('center');
       
       settingsSheet.getRange('E3').setValue('Label Name')
         .setFontWeight('bold')
-        .setBackground('#34C759')
+        .setBackground('#A8B89F')  // Soft moss green
         .setFontColor('white')
         .setHorizontalAlignment('center');
       
@@ -294,19 +294,19 @@ function setupConfigurationHelper() {
         [''],  // Extra rows for user
         [''],
         ['']
-      ]).setBackground('#F5F5F7');
+      ]).setBackground('#EEF1ED');  // Soft moss tint
       
       // ==== TEAM MEMBERS SECTION ====  
       settingsSheet.getRange('A14').setValue('👥 Team Members')
         .setFontWeight('bold')
         .setFontSize(12)
-        .setBackground('#FF9500')
+        .setBackground('#B8A394')  // Natural taupe
         .setFontColor('white')
         .setHorizontalAlignment('center');
       
       settingsSheet.getRange('B14').setValue('Name')
         .setFontWeight('bold')
-        .setBackground('#FF9500')
+        .setBackground('#B8A394')  // Natural taupe
         .setFontColor('white')
         .setHorizontalAlignment('center');
       
@@ -321,19 +321,22 @@ function setupConfigurationHelper() {
         ['Team Member 6'],
         ['Team Member 7'],
         ['Team Member 8']
-      ]).setBackground('#FFF5CC');
+      ]).setBackground('#F0EBE6');  // Soft warm beige
       
       // ==== PILLARS/DEPARTMENTS SECTION ====
+      // Clear columns D and E in the Team/Pillar section to avoid duplicates
+      settingsSheet.getRange('D15:E23').clearContent();
+      
       settingsSheet.getRange('D14').setValue('🏛️ Pillars/Departments (Column G)')
         .setFontWeight('bold')
         .setFontSize(12)
-        .setBackground('#FF3B30')
+        .setBackground('#8B9DAF')  // Soft slate blue
         .setFontColor('white')
         .setHorizontalAlignment('center');
       
       settingsSheet.getRange('G14').setValue('Pillar Name')
         .setFontWeight('bold')
-        .setBackground('#FF3B30')
+        .setBackground('#8B9DAF')  // Soft slate blue
         .setFontColor('white')
         .setHorizontalAlignment('center');
       
@@ -348,7 +351,7 @@ function setupConfigurationHelper() {
         ['Support'],
         ['Finance'],
         ['HR']
-      ]).setBackground('#FFF5CC');
+      ]).setBackground('#E5EAF0');  // Soft slate tint
       
       // ==== COLUMN WIDTHS ====
       settingsSheet.setColumnWidth(1, 150);  // A

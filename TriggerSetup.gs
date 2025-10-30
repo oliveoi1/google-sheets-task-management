@@ -387,7 +387,7 @@ function createTaskSheets() {
       const headerRange = sheet.getRange(4, 1, 1, headers.length);
       headerRange.setValues([headers]);
       headerRange.setFontWeight('bold');
-      headerRange.setBackground('#007AFF');
+      headerRange.setBackground('#7D9D8E');  // Sage green
       headerRange.setFontColor('white');
       headerRange.setHorizontalAlignment('center');
       headerRange.setFontFamily('Arial');
